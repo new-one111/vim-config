@@ -15,7 +15,7 @@ set ruler                " 总是显示光标位置
 set laststatus=2         " 总是显示状态栏
 set number               " 开启行号显示
 set cursorline           " 高亮显示当前行
-"highlight CursorLine   cterm=NONE ctermbg=black guibg=NONE guifg=NONE
+highlight CursorLine   cterm=NONE ctermbg=black guibg=NONE guifg=NONE
                          " 高亮显示当前行具体设置
 set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %c:%l/%L%)
                          " 设置状态行显示的信息
@@ -33,12 +33,12 @@ set display=lastline     " 避免折行后某一行不见
 set fillchars=vert:\ ,stl:\ ,stlnc:\   
                          " 在分割窗口间留出空白
 set autochdir            " 移至当前文件所在目录
-set clipboard=unnamed
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 快捷键设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "`"      " 定义<leader>键
-nnoremap <leader><leader>i :PlugInstall<cr>
+nnoremap <leader><leader>i :PluginInstall<cr>
                          " 安装插件
 nnoremap <leader><leader>u :PlugUpdate<cr>
                          " 更新插件
@@ -49,9 +49,6 @@ nnoremap <c-l> <c-w>l
 nnoremap <c-j> <c-w>j  
 nnoremap <c-k> <c-w>k
                          " 窗口切换 
-                         
-nnoremap <Space> i
-nnoremap <c-a> ggvG0yy
 "inoremap <Up> <Nop>
 "inoremap <Left> <Nop>
 "inoremap <Right> <Nop>
@@ -62,52 +59,30 @@ noremap gj j
 noremap gk k
 noremap k gk
                          " 移动对应屏幕行
-noremap a k
-noremap s j
-noremap k h
-noremap l l
-
-nnoremap rt <esc>:w<cr>
-
-""
 
 
-"map <F12> :call Clss()<CR>
-"func! Clss()
-"    exec '!clear'
-"    endfunc              " F12一键清屏
-"map <F9> :call CompileRunGcc()<CR>
-"func! CompileRunGcc()
-"    exec "w" 
-"    exec '!g++ % -o %>.exe'
-"    exec './%>.exe'
-"    endfunc              " F9一键编译运行
+
+
+map <F12> :call Clss()<CR>
+func! Clss()
+    exec '!clear'
+    endfunc              " F12一键清屏
+map <F9> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w" 
+    exec '!g++ % -o %<'
+    exec '!time ./%<'
+    endfunc              " F9一键编译运行
 map <F8> :call Term()<CR>
 func! Term()
     exec 'terminal'
-    endfunc               " F8调出终端
-"map <F11> :call GDB()<CR>
-"func! GDB()
-"    exec 'Termdebug %<'
-"    endfunc              " F11进行调试
+    endfunc              " F8调出终端
+map <F11> :call GDB()<CR>
+func! GDB()
+    exec 'Termdebug %<'
+    endfunc              " F11进行调试
 map <F10> :NERDTreeToggle<CR>
                          " F10开启目录树nerdtree插件
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "! %<"
-    elseif &filetype == 'cpp'
-        exec "!g++ -Wall -std=c++17 % -fexec-charset=gbk -o %<"
-        exec "! %<"
-    elseif &filetype == 'java' 
-        exec "!javac %" 
-        exec "!java %<"
-    elseif &filetype == 'sh'
-        :!%
-    endif
-endfunc
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 代码缩进和排版
@@ -149,57 +124,51 @@ set confirm             " 在处理未保存或只读文件的时候，弹出确
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 编码设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set langmenu=zh_CN.utf-8
+set langmenu=zh_CN.UTF-8
 set helplang=cn
 set termencoding=utf-8
-set encoding=utf-8  
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
+set encoding=utf8
+set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 插件列表
-" Plug-Vim的使用
-call plug#begin('~/vim90/plugged')
-Plug 'chxuan/vimplus-startify'                 " 启动界面
-Plug 'scrooloose/nerdtree'                     " 目录树
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " 目录树美化
-Plug 'vim-airline/vim-airline'                 " 状态栏美化
-Plug 'vim-airline/vim-airline-themes'          " 状态栏美化主题
-Plug 'tpope/vim-commentary'                    " 快速注释
-Plug 'w0rp/ale'                                " 语法错误提示
-Plug 'Lokaltog/vim-easymotion'                 " 快速跳转
-Plug 'luochen1990/rainbow'                     " 彩虹括号
-"Plugin 'Raimondi/delimitMate'                   " 括号补全
-Plug 'yianwillis/vimcdoc'                      " HELP文档中文
-Plug 'sjl/gundo.vim'                           " 撤销树
-"Plug 'suan/vim-instant-markdown'               " markdown 实时预览
-Plug 'morhetz/gruvbox'
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc c++补全
-call plug#end()
-
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>" 
-" coc补全设置回车选定
-
-autocmd vimenter * nested colorscheme gruvbox
-set bg=dark
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 插件设置:
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin('~/.vim/plugged')
+
+Plugin 'VundleVim/Vundle.vim'                    " 使用Vundle的必须配置
+Plugin 'chxuan/vimplus-startify'                 " 启动界面
+Plugin 'scrooloose/nerdtree'                     " 目录树
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight' " 目录树美化
+Plugin 'vim-airline/vim-airline'                 " 状态栏美化
+Plugin 'vim-airline/vim-airline-themes'          " 状态栏美化主题
+Plugin 'tpope/vim-commentary'                    " 快速注释
+Plugin 'w0rp/ale'                                " 语法错误提示
+Plugin 'Lokaltog/vim-easymotion'                 " 快速跳转
+Plugin 'luochen1990/rainbow'                     " 彩虹括号
+"Plugin 'Raimondi/delimitMate'                   " 括号补全
+Plugin 'yianwillis/vimcdoc'                      " HELP文档中文
+Plugin 'sjl/gundo.vim'                           " 撤销树
+Plugin 'suan/vim-instant-markdown'               " markdown 实时预览
+
+call vundle#end()            
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 插件设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " airline 设置
-if filereadable(expand('~/.vimrc.airline'))
-    source ~/.vimrc.airline
+if filereadable(expand($HOME . '/.vimrc.airline'))
+    source $HOME/.vimrc.airline
 endif
 
 " rainbow
 let g:rainbow_active = 1
 
 " Gundo
-nnoremap <F7> :GundoToggle<Cr>
+nnoremap <F7> :GundoToggle<CR>
 
 " Nerdtree设置
-if filereadable(expand('~/.vimrc.nerdtree'))
-    source ~/.vimrc.nerdtree
+if filereadable(expand($HOME . '/.vimrc.nerdtree'))
+    source $HOME/.vimrc.nerdtree
 endif
 
-"autocmd BufNewFile *.cpp 0r C:/CppTool/Vim/vim90/template/tem.cpp"
-
-"colorscheme onedark
+colorscheme onedark
